@@ -34,11 +34,39 @@ This project implements an AI-powered pizza ordering agent for Contoso Pizza, bu
    pip install azure-ai-projects azure-identity azure-ai-agents python-dotenv
    ```
 
-4. Set up environment variables:
+4. Set up environment variables and configuration:
    - Create a `.env` file in the project root
    - Add your Azure Project connection string:
      ```
      PROJECT_CONNECTION_STRING=your_connection_string_here
+     ```
+   
+5. Update agent.py configuration:
+   The following configurations in `agent.py` must be updated according to your environment:
+   ```python
+   # Update the MCP endpoint URL
+   mcp_endpoint="https://your-mcp-server-endpoint.com/sse"
+
+   # Update the agent configuration
+   agent = project_client.agents.create_agent(
+       # Update model if needed
+       model="gpt-4o",
+       # Update MCP server configuration
+       mcp_tool = [{
+           "server_label": "pizza_mcp_server",
+           "server_url": "https://your-mcp-server-endpoint.com/sse",
+           "allowed_tools": [...]  # Update with your available tools
+       }]
+   )
+   ```
+
+6. Configure store information:
+   - Update the store information file path in `agent.py`:
+     ```python
+     file = project_client.agents.files.upload(
+         file_path="./knowledge/contoso-stores_v1/your_store_file.md",
+         purpose=FilePurpose.AGENTS
+     )
      ```
 
 ## Project Structure
@@ -137,11 +165,3 @@ The agent includes robust error handling for:
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
-
-## License
-
-[Insert appropriate license information]
-
-## Support
-
-For support, please contact [Insert contact information]
